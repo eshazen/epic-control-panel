@@ -5,8 +5,10 @@
  *  Motor STEP on MOSI / PB3
  *  Motor DIR on MISO / PB4
  *
- * Button 1 runs motor 1/4 rev CW
- * Button 2 runs motor 1/4 rev CCW
+ * Button 1 runs motor <revs> CW
+ * Button 2 runs motor <revs> CCW
+ * Button 3 increments <revs>
+ * Button 4 decrements <revs>
  *
  * setup 1kHz timer interrupt
  * scan buttons every 8ms and queue hits

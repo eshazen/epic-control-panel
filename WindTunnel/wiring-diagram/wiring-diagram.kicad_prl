@@ -64,7 +64,7 @@
       39,
       40
     ],
-    "visible_layers": "00950a5_00000001",
+    "visible_layers": "fffffff_ffffffff",
     "zone_display_mode": 0
   },
   "git": {
@@ -74,7 +74,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "control-panel.kicad_prl",
+    "filename": "wiring-diagram.kicad_prl",
     "version": 3
   },
   "project": {
