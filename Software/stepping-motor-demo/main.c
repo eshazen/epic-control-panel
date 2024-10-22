@@ -1,13 +1,19 @@
 /*
- * demo code for SCOS control panel
+ * demo code for stepping motor control on Eric's control board
+ *
+ * wiring:
+ *  Motor STEP on MOSI / PB3
+ *  Motor DIR on MISO / PB4
+ *
+ * Button 1 runs motor <revs> CW
+ * Button 2 runs motor <revs> CCW
+ * Button 3 increments <revs>
+ * Button 4 decrements <revs>
  *
  * setup 1kHz timer interrupt
  * scan buttons every 8ms and queue hits
  * interrupt on shaft encoder rotation and update value
  * 
- * send to USART and 9600 baud:
- *   e <count>         on encoder change
- *   k <code>          on key press
  */
 
 // local display of data sent
@@ -28,10 +34,12 @@
 #include "kb.h"
 #include "uart.h"
 #include "led.h"
+#include "step.h"
 
 static char buff[16];
 static int16_t this_shaft;
 static uint8_t esc;
+static uint16_t revs = 1;
 
 void delay_mul( int count) {
   if( count)
@@ -58,36 +66,19 @@ int main (void)
   ENC_LED_DDR |= ENC_LED_MASK;
   ENC_LED_PORT |= ENC_LED_MASK;
 
-  lcd_puts("SCOS Control V0.1");
+  lcd_puts("Wind Tunnel 0.1");
   ms = get_millis();
-  while( get_millis() - ms < 1000)
+  while( get_millis() - ms < 1000) /* delay 1s */
     ;
   lcd_cls();
   set_leds( 0);
+  step_init();
+
+  step_run( 0, MICRO_STEPS*50);
+  step_run( 1, MICRO_STEPS*50);
 
   while( 1) {
     ms = get_millis();
-
-#ifdef UART_LCD
-    if( USART0CharacterAvailable()) {
-      uint8_t ch = USART0ReceiveByte();
-      if( esc) {
-	set_leds( ch);
-	esc = 0;
-      } else {
-	if( ch == '\001')
-	  lcd_cls();
-	else if( ch == '\002')
-	  lcd_addr(40);
-	else if( ch == '\033')
-	  esc = 1;
-	else if( ch == '\003')
-	  lcd_addr(0);
-	else if( isprint( ch))
-	  lcd_putc( ch);
-      }
-    }
-#endif    
 
     // poll KB and shaft encoder every 8 ms
     if( !(ms & 7)) {
@@ -98,23 +89,39 @@ int main (void)
 
 	int k = get_kb();
 	if( k) {
-	  snprintf( buff, sizeof(buff), "k %d\n", k);
-#ifdef LOCAL_LCD
-	  lcd_addr(0);
-	  lcd_puts( buff);
-#endif
-	  USART0SendString( buff);
+	  // process button press
+	  switch( k) {
+	  case 1:
+	    lcd_addr( 40);
+	    lcd_puts( "Run CW ");
+	    step_run( 0, MICRO_STEPS*200*revs);
+	    lcd_cls();
+	    break;
+	  case 2:
+	    lcd_addr( 40);
+	    lcd_puts( "Run CCW");
+	    step_run( 1, MICRO_STEPS*200*revs);
+	    lcd_cls();
+	    break;
+	  case 3:
+	    revs++;
+	    lcd_addr( 40);
+	    snprintf( buff, sizeof(buff), "%d Revs ", revs);
+	    lcd_puts( buff);
+	    break;
+	  case 4:
+	    if( revs > 1)
+	      --revs;
+	    lcd_addr( 40);
+	    snprintf( buff, sizeof(buff), "%d Revs ", revs);
+	    lcd_puts( buff);
+	    break;
+	  }
 	}
 
 	this_shaft = get_shaft_count();
 	if( this_shaft) {
-	  snprintf( buff, sizeof(buff), "e %d\n", this_shaft);
-	  clear_shaft();
-#ifdef LOCAL_LCD
-	  lcd_addr(40);
-	  lcd_puts( buff);
-#endif
-	  USART0SendString( buff);
+	  // process knob rotation
 	}
 
       }
