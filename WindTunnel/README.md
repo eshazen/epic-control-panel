@@ -55,7 +55,7 @@ program, which runs fine.  Also found that there is an easy patch to
 Arduino to run on a "breadboard" 8MHz ATMega328, so in principle the
 Arduino IDE could be used.
 
-### Features
+### UI option 1
 
 In absence of any input from the customer, we propose the following
 feature list, which would be implemented as a menu selected using the
@@ -72,10 +72,34 @@ should be fine.  The display could show something like this on two lines:
 
     C 999.9 N 999.9
     HOME GO SAV RCL
-
+1
 "C" is current position.  "N" is new position.
 <br>The knob would cycle between the four bottom menu items and the
 "new" position.  Click the knob to select.  When the position is
 selected, adjust the position with the knob.
 
 A label next to the display can explain.
+
+### UI option 2
+
+Two buttons would be dedicated to UP and DOWN and would always move
+the motor.  Speed would gradually increase as the button is held.
+Taps of the button would move by one unit (unit t.b.d.).
+
+Two other buttons would implement SAVE and RECALL.
+Memory positions (e.g. 1..4) would be selected using the knob.
+
+If home position is not known, the display would show e.g.
+
+    PRESS RECALL TO
+    CALIBRATE HOME
+	
+Otherwise normally the display would show:
+
+    ****************
+    Cur pos: 999.9 
+      Pos n: 999.9
+    ****************
+
+Where the "n" would change as the knob is rotated.
+If a stored position is unknown, "???.?" would display.
