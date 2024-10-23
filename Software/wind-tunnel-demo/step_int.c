@@ -1,28 +1,21 @@
+#include "step_int.h"
 //
-// single timer interrupt to count milliseconds
-// simple interrupt-driven stepping motor code included
+// interrupt-driver stepping motor code
+// N.B. configured for 8MHz system clock
 //
 
-// interrupt at 8kHz
+// for now, interrupt and step at 1kHz
 
-#define INTERRUPT_STEPPER
-
-#ifdef INTERRUPT_STEPPER
-#include "step.h"
 volatile uint16_t steps_to_go = 0;
 volatile uint8_t ticks_per_step = 8;
 volatile uint8_t ticks_this_step = 0;
-volatile uint32_t motor_pos = 0;
-volatile uint8_t motor_dir;
-#endif
-
-#include "timer.h"
 
 volatile uint8_t ticks = 0;
 volatile uint32_t millis_value = 0;
 
 //------------------------------------------------------------------------------
-void timer_setup(void){
+// setup timer 0 to interrupt at about 8kHz
+void step_setup(void){
 
   TCCR0A = (1 << WGM01);	/* set CTC mode so stop at OCR0A */
   
@@ -32,8 +25,8 @@ void timer_setup(void){
   // Set CS00 + 01 bits so timer runs at clock speed/64:
   TCCR0B |= (1 << CS01) | (1 << CS00);
   // N.B. this is 8-bit value for timer 0
-  //  OCR0A = 125;			/* 8MHz / 64 / 125 = 1kHz */
-  OCR0A = 14;			/* 8MHz / 64 / 15 = 8kHz */
+  OCR0A = 125;		/* 8MHz / 64 / 125 = 1kHz */
+  // OCR0A = 14;			/* 8MHz / 64 / 15 = 8kHz */
 }
 
 //------------------------------------------------------------------------------

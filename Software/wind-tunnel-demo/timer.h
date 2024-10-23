@@ -10,5 +10,6 @@ uint32_t get_millis(void);
 uint16_t get_millis_u16(void);
 uint8_t get_millis_u8(void);
 void set_steps( uint16_t s);
+void set_speed( uint8_t s);
 
 #endif
