@@ -35,9 +35,9 @@ DUDEPORT  = -c usbtiny -P usb
 DUDEMCU = m328p
 AVRDUDE  = avrdude $(DUDEPORT) -p $(DUDEMCU) -y -u 
 
-objects = main.o lcd.o shaft.o timer.o kb.o uart_int.o ioport.o led.o step.o
+objects = main.o lcd.o shaft.o timer.o kb.o uart_int.o ioport.o led.o
 
-headers = lcd.h shaft.h timer.h kb.h uart_int.h ioport.h led.h step.h
+headers = lcd.h shaft.h timer.h kb.h uart_int.h ioport.h led.h
 
 
 all: $(objects)  main.hex list
