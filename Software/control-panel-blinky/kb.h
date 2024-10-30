@@ -24,4 +24,9 @@ void push_kb( uint8_t k);
 void poll_kb();
 uint8_t get_kb();
 
+// read current value
+// 4 buttons (bits 0-3) and encoder switch (bit 4)
+#define KB_BITS 5
+#define read_kb() ((((SW_PIN >> SW0_BIT) & 0xf) | (((ENC_SW_PIN >> ENC_SW_BIT) & 1) << 4)) ^ 0x1f)
+
 #endif

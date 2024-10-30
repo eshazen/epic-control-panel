@@ -28,11 +28,6 @@ volatile uint8_t kb_head, kb_tail;
 // push to buffer
 #define _push_kb(k) (kb_buff[kb_head]=k,kb_head=kb_next(kb_head))
 
-// read current value
-// 4 buttons (bits 0-3) and encoder switch (bit 4)
-#define KB_BITS 5
-#define read_kb() ((((SW_PIN >> SW0_BIT) & 0xf) | (((ENC_SW_PIN >> ENC_SW_BIT) & 1) << 4)) ^ 0x1f)
-
 // return next code or 0
 uint8_t get_kb() {
   uint8_t k;

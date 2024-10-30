@@ -24,10 +24,10 @@ RFUSEOPT = -U hfuse:r:-:h -U lfuse:r:-:h -U efuse:r:-:h
 
 # programmer configuration for avrdude programming utility
 # for AVRISP programmer on USB
-# DUDEPORT  = -c avrispv2 -P usb
+DUDEPORT  = -c avrispv2 -P usb
 
 # USB tiny programmer
-DUDEPORT  = -c usbtiny -P usb
+# DUDEPORT  = -c usbtiny -P usb
 
 # for Arduino bootloader
 # DUDEPORT  = -c arduino -P /dev/ttyACM0
@@ -35,9 +35,9 @@ DUDEPORT  = -c usbtiny -P usb
 DUDEMCU = m328p
 AVRDUDE  = avrdude $(DUDEPORT) -p $(DUDEMCU) -y -u 
 
-objects = main.o lcd.o shaft.o timer.o kb.o uart_int.o ioport.o led.o
+objects = main.o lcd.o shaft.o timer.o kb.o uart_int.o ioport.o led.o step.o
 
-headers = lcd.h shaft.h timer.h kb.h uart_int.h ioport.h led.h
+headers = lcd.h shaft.h timer.h kb.h uart_int.h ioport.h led.h step.h
 
 
 all: $(objects)  main.hex list
