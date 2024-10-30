@@ -1,5 +1,10 @@
 # Wind tunnel control code
 
+## Debug commits
+
+* eb7472d (HEAD) UP/DOWN for test; working on step_int
+  <br>This one is working with two bottons for up/down
+
 ## Wiring
 
     MOSI to DIR
